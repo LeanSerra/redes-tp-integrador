@@ -11,10 +11,10 @@
 - [x] Direccionamiento tipo classles para IPv4 (proponer direccionamiento basado en la RFC 1918 para la intranet, definir máscaras, etc.)
 - [x] Direccionamiento público para el servidor http (inventar una IP pública y un dominio)
 - [ ] Direccionamiento IPv6 (definir IP globales y link local estáticas para las líneas punto a punto, máscaras, ULA optativo, etc.)
-- [-] Rutas por default en el router de borde (en IPv4 e IPv6)
+- [ ] Rutas por default en el router de borde (en IPv4 e IPv6)
 - [ ] Simular un router ISP para su conexión a internet dual stack
-- [-] Propagar rutas por default a todos los dispositivos del sistema autónomo
-- [-] Ruteo dinámico (a elección RIP, EIGRP, OSPF con sus variante para IPv6)
+- [ ] Propagar rutas por default a todos los dispositivos del sistema autónomo
+- [ ] Ruteo dinámico (a elección RIP, EIGRP, OSPF con sus variante para IPv6)
 - [x] Vlans (definir las mismas a elección). Al menos un router 4331 ruteando en 802.1q
 con switches 2960 (método router on a stick)
 - [x] Hosts (laptops, PC desktop, impresoras, servers, etc. Todos conectados por medio de Fast/ Gigabit Ethernet).
@@ -473,7 +473,7 @@ enable secret grupo8
     ```
 
 # Configuraciones Network Controller
-1. Desde el navegador de ADMPCC ir a http://10.0.60.2
+1. Desde el navegador de ADMPC ir a http://10.0.60.2
 2. `username`: `grupo8` `password`: `tpfinal`
 3. Ir a provisioning
     - Solapa credentials
