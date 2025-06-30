@@ -486,3 +486,7 @@ enable secret grupo8
         - name: SW1
         - ip address: 10.1.0.2
         - CLI credential list: grupo8 - SSH
+
+# Postman
+
+[Ejemplo postman](./postman/README.md)
