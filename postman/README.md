@@ -1,20 +1,20 @@
 # Uso de API con Postman
 
-### PUT crear API token
+### POST crear API token
 
-![put](./put.png)
+![post](./post.png)
 
 ### GET listar usuarios
 
 ![get](./get.png)
 
-### PUT crear usuario
+### POST crear usuario
 
-![put-usuario](./put-user.png)
+![post-usuario](./post-user.png)
 
-### POST modificar usuario
+### PUT modificar usuario
 
-![post](./post.png)
+![put](./put.png)
 
 ### DELETE borrar usuario
 
