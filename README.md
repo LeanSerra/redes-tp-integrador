@@ -19,7 +19,7 @@
 con switches 2960 (método router on a stick)
 - [x] Hosts (laptops, PC desktop, impresoras, servers, etc. Todos conectados por medio de Fast/ Gigabit Ethernet).
 
-# Pasos que seguí para configurar
+# Pasos que seguímos para configurar
 
 ## Configuraciones de seguridad
 
@@ -38,6 +38,8 @@ exit
 no ip domain-lookup
 enable secret grupo8
 ```
+
+## IPV4
 
 ### R1
 
@@ -448,7 +450,17 @@ enable secret grupo8
 
 ### ISP
 1. [Configuraciones de seguridad](#configuraciones-de-seguridad)
-2. ssh? TODO preguntar
+2. SSH
+    ```
+    configure terminal
+    ip domain-name isp.grupo8.com
+    crypto key generate rsa
+    line vty 0 4
+    transport input ssh
+    login local
+    exit
+    username grupo8 privilege 15 password tpfinal
+    ip ssh version 2
 2. Interfaces ISP
     ```
     configure terminal
@@ -486,6 +498,252 @@ enable secret grupo8
         - name: SW1
         - ip address: 10.1.0.2
         - CLI credential list: grupo8 - SSH
+
+## Configuraciones IPV6
+
+### Activar Routing IPV6
+```
+configure terminal
+ipv6 unicast-routing
+```
+
+### R1
+1. Interfaces R1
+    ```
+    configure terminal
+
+    interface S0/1/1
+    ipv6 address 2001:DB8:0:2::/127
+    ipv6 address fe80:: link-local
+    exit
+
+    interface S0/1/0
+    ipv6 address 2001:DB8:0:1::/127
+    ipv6 address fe80:: link-local
+    exit
+
+    interface G0/0/0
+    ipv6 address 2001:DB8:0:1::4/127
+    ipv6 address fe80:: link-local
+    exit
+
+    interface G0/0/1.50
+    ipv6 address 2001:DB8:0:50::/127
+    exit
+
+    interface G0/0/1.60
+    ipv6 address 2001:DB8:0:60::/127
+    exit
+    ```
+2. Ruta estatica por defecto
+    ```
+    configure terminal
+    ipv6 route ::/0 2001:db8:0:2::1
+    exit
+    ```
+3. RIP ipv6
+    ```
+    configure terminal
+
+    ipv6 router rip GRUPO8
+    redistribute static
+
+    inerface S0/1/1
+    ipv6 rip GRUPO8 enable
+
+    interface S0/1/0
+    ipv6 rip GRUPO8 enable
+
+    interface G0/0/0
+    ipv6 rip GRUPO8 enable
+    exit
+    ```
+
+### R2
+1. Interfaces R2
+    ```
+    configure terminal
+
+    interface S0/1/0
+    ipv6 address 2001:DB8:0:1::1/127
+    ipv6 address fe80::1 link-local
+    exit
+
+    interface S0/1/1
+    ipv6 address 2001:DB8:0:1::2/127
+    ipv6 address fe80:: link-local
+    exit
+
+    interface G0/0/0
+    ipv6 address 2001:DB8:0:1::6/127
+    ipv6 address fe80:: link-local
+    exit
+    ```
+2. RIP ipv6
+    ```
+    configure terminal
+
+    ipv6 router rip GRUPO8
+
+    interface S0/1/0
+    ipv6 rip GRUPO8 enable
+
+    interface S0/1/1
+    ipv6 rip GRUPO8 enable
+
+    interface G0/0/0
+    ipv6 rip GRUPO8 enable
+    ```
+
+### R3
+1. Interfaces R2
+    ```
+    configure terminal
+
+    interface S0/1/1
+    ipv6 address 2001:DB8:0:1::3/127
+    ipv6 address fe80::1 link-local
+    exit
+
+    interface G0/0/0
+    ipv6 address 2001:DB8:0:1:8/127
+    ipv6 address fe80:: link-local
+    exit
+    ```
+2. RIP ipv6
+    ```
+    configure terminal
+
+    ipv6 router rip GRUPO8
+
+    interface S0/1/1
+    ipv6 rip GRUPO8 enable
+
+    interface G0/0/0
+    ipv6 rip GRUPO8 enable
+    ```
+
+### SW1
+1. Interfaces SW1
+    ```
+    configure terminal
+
+    interface vlan10
+    ipv6 address 2001:db8:0:10::/64
+    ipv6 address fe80:: link-local
+    exit
+
+    interface vlan20
+    ipv6 address 2001:db8:0:20::/64
+    ipv6 address fe80:: link-local
+    exit
+
+    interface G1/0/24
+    ipv6 address 2001:DB8:0:1::5/127
+    ipv6 address fe80::1 link-local
+    exit
+    ```
+2. RIP ipv6
+    ```
+    configure terminal
+
+    ipv6 router rip GRUPO8
+
+    interface vlan10
+    ipv6 rip GRUPO8 enable
+
+    interface vlan20
+    ipv6 rip GRUPO8 enable
+
+    interface G1/0/24
+    ipv6 rip GRUPO8 enable
+    ```
+
+### SW2
+1. Interfaces SW1
+    ```
+    configure terminal
+
+    interface vlan30
+    ipv6 address 2001:db8:0:30::/64
+    ipv6 address fe80:: link-local
+    exit
+
+    interface vlan40
+    ipv6 address 2001:db8:0:40::/64
+    ipv6 address fe80:: link-local
+    exit
+
+    interface G1/0/24
+    ipv6 address 2001:DB8:0:1::7/127
+    ipv6 address fe80::1 link-local
+    exit
+    ```
+2. RIP ipv6
+    ```
+    configure terminal
+
+    ipv6 router rip GRUPO8
+
+    interface vlan30
+    ipv6 rip GRUPO8 enable
+
+    interface vlan40
+    ipv6 rip GRUPO8 enable
+
+    interface G1/0/24
+    ipv6 rip GRUPO8 enable
+    ```
+
+### SW3
+1. Interfaces SW1
+    ```
+    configure terminal
+
+    interface vlan70
+    ipv6 address 2001:db8:0:70::/64
+    ipv6 address fe80:: link-local
+    exit
+
+    interface G1/0/24
+    ipv6 address 2001:DB8:0:1::9/127
+    ipv6 address fe80:: link-local
+    exit
+    ```
+2. RIP ipv6
+    ```
+    configure terminal
+
+    ipv6 router rip GRUPO8
+
+    interface vlan70
+    ipv6 rip GRUPO8 enable
+
+    interface G1/0/24
+    ipv6 rip GRUPO8 enable
+    ```
+
+### ISP
+1. Interfaces ISP
+    ```
+    configure terminal
+
+    interface S0/1/1
+    ipv6 address 2001:db8:0:2::1/127
+    ipv6 address fe80::1 link-local
+    exit
+
+    interface G0/0/0
+    ipv6 address 2800:110:1010::/64
+    ipv6 address fe80:: link-local
+    exit
+    ```
+2. Ruta estatica por defecto
+    ```
+    configure terminal
+    ipv6 route ::/0 Serial 0/1/1 FE80::
+    exit
+    ```
 
 # Postman
 
