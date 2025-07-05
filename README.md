@@ -10,11 +10,11 @@
 - [x] 1 servidor DHCP en un 3650 y otro en un 4331 (no vale configurar desde la solapa services de un servidor)
 - [x] Direccionamiento tipo classles para IPv4 (proponer direccionamiento basado en la RFC 1918 para la intranet, definir máscaras, etc.)
 - [x] Direccionamiento público para el servidor http (inventar una IP pública y un dominio)
-- [ ] Direccionamiento IPv6 (definir IP globales y link local estáticas para las líneas punto a punto, máscaras, ULA optativo, etc.)
+- [x] Direccionamiento IPv6 (definir IP globales y link local estáticas para las líneas punto a punto, máscaras, ULA optativo, etc.)
 - [ ] Rutas por default en el router de borde (en IPv4 e IPv6)
-- [ ] Simular un router ISP para su conexión a internet dual stack
+- [x] Simular un router ISP para su conexión a internet dual stack
 - [ ] Propagar rutas por default a todos los dispositivos del sistema autónomo
-- [ ] Ruteo dinámico (a elección RIP, EIGRP, OSPF con sus variante para IPv6)
+- [x] Ruteo dinámico (a elección RIP, EIGRP, OSPF con sus variante para IPv6)
 - [x] Vlans (definir las mismas a elección). Al menos un router 4331 ruteando en 802.1q
 con switches 2960 (método router on a stick)
 - [x] Hosts (laptops, PC desktop, impresoras, servers, etc. Todos conectados por medio de Fast/ Gigabit Ethernet).
@@ -555,22 +555,22 @@ ipv6 unicast-routing
     ipv6 route ::/0 2001:db8:0:2::1
     exit
     ```
-3. RIP ipv6
+3. OSPF ipv6
     ```
     configure terminal
 
-    ipv6 router rip GRUPO8
+    ipv6 router ospf 8
+    router-id 1.1.1.1
+    default-information originate
     redistribute static
-
-    inerface S0/1/1
-    ipv6 rip GRUPO8 enable
-
-    interface S0/1/0
-    ipv6 rip GRUPO8 enable
+    passive-interface G0/0/1
+    passive-interface S0/1/1
+    exit
 
     interface G0/0/0
-    ipv6 rip GRUPO8 enable
-    exit
+    ipv6 ospf 8 area 0
+    interface S0/1/0
+    ipv6 ospf 8 area 0
     ```
 
 ### R2
@@ -593,20 +593,20 @@ ipv6 unicast-routing
     ipv6 address fe80:: link-local
     exit
     ```
-2. RIP ipv6
+2. OSPF ipv6
     ```
     configure terminal
 
-    ipv6 router rip GRUPO8
-
-    interface S0/1/0
-    ipv6 rip GRUPO8 enable
-
-    interface S0/1/1
-    ipv6 rip GRUPO8 enable
+    ipv6 router ospf 8
+    router-id 2.2.2.2
+    exit
 
     interface G0/0/0
-    ipv6 rip GRUPO8 enable
+    ipv6 ospf 8 area 0
+    interface S0/1/0
+    ipv6 ospf 8 area 0
+    interface S0/1/1
+    ipv6 ospf 8 area 0
     ```
 
 ### R3
@@ -624,17 +624,18 @@ ipv6 unicast-routing
     ipv6 address fe80:: link-local
     exit
     ```
-2. RIP ipv6
+2. OSPF ipv6
     ```
     configure terminal
 
-    ipv6 router rip GRUPO8
-
-    interface S0/1/1
-    ipv6 rip GRUPO8 enable
+    ipv6 router ospf 8
+    router-id 3.3.3.3
+    exit
 
     interface G0/0/0
-    ipv6 rip GRUPO8 enable
+    ipv6 ospf 8 area 0
+    interface S0/1/1
+    ipv6 ospf 8 area 0
     ```
 
 ### SW1
@@ -657,20 +658,20 @@ ipv6 unicast-routing
     ipv6 address fe80::1 link-local
     exit
     ```
-2. RIP ipv6
+2. OSPF ipv6
     ```
     configure terminal
 
-    ipv6 router rip GRUPO8
-
-    interface vlan10
-    ipv6 rip GRUPO8 enable
-
-    interface vlan20
-    ipv6 rip GRUPO8 enable
+    ipv6 router ospf 8
+    router-id 11.11.11.11
+    exit
 
     interface G1/0/24
-    ipv6 rip GRUPO8 enable
+    ipv6 ospf 8 area 0
+    interface vlan10
+    ipv6 ospf 8 area 0
+    interface vlan20
+    ipv6 ospf 8 area 0
     ```
 
 ### SW2
@@ -693,20 +694,20 @@ ipv6 unicast-routing
     ipv6 address fe80::1 link-local
     exit
     ```
-2. RIP ipv6
+2. OSPF ipv6
     ```
     configure terminal
 
-    ipv6 router rip GRUPO8
-
-    interface vlan30
-    ipv6 rip GRUPO8 enable
-
-    interface vlan40
-    ipv6 rip GRUPO8 enable
+    ipv6 router ospf 8
+    router-id 22.22.22.22
+    exit
 
     interface G1/0/24
-    ipv6 rip GRUPO8 enable
+    ipv6 ospf 8 area 0
+    interface vlan30
+    ipv6 ospf 8 area 0
+    interface vlan40
+    ipv6 ospf 8 area 0
     ```
 
 ### SW3
@@ -724,17 +725,18 @@ ipv6 unicast-routing
     ipv6 address fe80:: link-local
     exit
     ```
-2. RIP ipv6
+2. OSPF ipv6
     ```
     configure terminal
 
-    ipv6 router rip GRUPO8
-
-    interface vlan70
-    ipv6 rip GRUPO8 enable
+    ipv6 router ospf 8
+    router-id 33.33.33.33
+    exit
 
     interface G1/0/24
-    ipv6 rip GRUPO8 enable
+    ipv6 ospf 8 area 0
+    interface vlan70
+    ipv6 ospf 8 area 0
     ```
 
 ### ISP
