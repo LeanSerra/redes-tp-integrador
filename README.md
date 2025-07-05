@@ -11,9 +11,9 @@
 - [x] Direccionamiento tipo classles para IPv4 (proponer direccionamiento basado en la RFC 1918 para la intranet, definir máscaras, etc.)
 - [x] Direccionamiento público para el servidor http (inventar una IP pública y un dominio)
 - [x] Direccionamiento IPv6 (definir IP globales y link local estáticas para las líneas punto a punto, máscaras, ULA optativo, etc.)
-- [ ] Rutas por default en el router de borde (en IPv4 e IPv6)
+- [x] Rutas por default en el router de borde (en IPv4 e IPv6)
 - [x] Simular un router ISP para su conexión a internet dual stack
-- [ ] Propagar rutas por default a todos los dispositivos del sistema autónomo
+- [x] Propagar rutas por default a todos los dispositivos del sistema autónomo
 - [x] Ruteo dinámico (a elección RIP, EIGRP, OSPF con sus variante para IPv6)
 - [x] Vlans (definir las mismas a elección). Al menos un router 4331 ruteando en 802.1q
 con switches 2960 (método router on a stick)
@@ -494,8 +494,7 @@ enable secret grupo8
 2. Ruta estatica por defecto
     ```
     configure terminal
-    ip route 11.0.1.0 255.255.255.252 S0/1/1
-    ip route 10.0.0.0 255.0.0.0 11.0.1.0
+    ip route 0.0.0.0 0.0.0.0 Serial0/1/1
     ```
 
 # Configuraciones Network Controller
