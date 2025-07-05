@@ -100,15 +100,20 @@ enable secret grupo8
     configure terminal
     ip route 0.0.0.0 0.0.0.0 S0/1/1
     ```
-5. RIPv2
+5. OSPF
     ```
     configure terminal
-    router rip
-    version 2
-    network 10.0.50.0
-    network 10.0.60.0
-    network 10.0.1.0
-    no auto-summary
+
+    router ospf 8
+    router-id 1.1.1.1
+    default-information originate
+    passive-interface g0/0/1
+    passive-interface s0/1/1
+    network 11.0.1.1 0.0.0.3 area 0
+    network 10.0.1.1 0.0.0.3 area 0
+    network 10.1.0.1 0.0.0.3 area 0
+    network 10.0.50.1 0.0.0.255 area 0
+    network 10.0.60.1 0.0.0.255 area 0
     ```
 6. DHCP R1
     ```
@@ -166,14 +171,15 @@ enable secret grupo8
     no shutdown
     exit
     ```
-4. RIP R2
+4. OSPF
     ```
     configure terminal
 
-    router rip
-    version 2
-    network 10.0.0.0
-    no auto-summary
+    router ospf 8
+    router-id 2.2.2.2
+    network 10.0.1.2 0.0.0.3 area 0
+    network 10.0.2.1 0.0.0.3 area 0
+    network 10.2.0.1 0.0.0.3 area 0
     ```
 
 ### R3
@@ -206,14 +212,14 @@ enable secret grupo8
     no shutdown
     exit
     ```
-4. RIP R3
+4. OSPF
     ```
     configure terminal
 
-    router rip
-    version 2
-    network 10.0.0.0
-    no auto-summary
+    router ospf 8
+    router-id 3.3.3.3
+    network 10.0.2.2 0.0.0.3 area 0
+    network 10.3.0.1 0.0.0.3 area 0
     ```
 
 ### SW0
@@ -301,13 +307,17 @@ enable secret grupo8
     no shutdown
     exit
     ```
-4. RIP SW1
+4. OSPF
     ```
     configure terminal
-    router rip
-    version 2
-    network 10.0.0.0
-    no auto-summary
+
+    router ospf 8
+    router-id 11.11.11.11
+    passive-interface vlan 10
+    passive-interface vlan 20
+    network 10.0.10.254 0.0.0.255 area 0
+    network 10.0.20.254 0.0.0.255 area 0
+    network 10.1.0.2 0.0.0.3 area 0
     ```
 5. DHCP SW1
     ```
@@ -383,14 +393,17 @@ enable secret grupo8
     ip address 10.2.0.2 255.255.255.252
     exit
     ```
-4. RIP SW2
+4. OSPF
     ```
     configure terminal
 
-    router rip
-    version 2
-    network 10.0.0.0
-    no auto-summary
+    router ospf 8
+    router-id 22.22.22.22
+    passive-interface vlan30
+    passive-interface vlan40
+    network 10.0.30.254 0.0.0.255 area 0
+    network 10.0.40.254 0.0.0.255 area 0
+    network 10.2.0.2 0.0.0.3 area 0
     ```
 5. DHCP SW1
     ```
@@ -438,14 +451,15 @@ enable secret grupo8
     no shutdown
     exit
     ```
-3. RIP R3
+3. OSPF
     ```
     configure terminal
 
-    router rip
-    version 2
-    network 10.0.0.0
-    no auto-summary
+    router ospf 8
+    router-id 33.33.33.33
+    passive-interface vlan70
+    network 10.0.70.254 0.0.0.255 area 0
+    network 10.3.0.2 0.0.0.3 area 0
     ```
 
 ### ISP
